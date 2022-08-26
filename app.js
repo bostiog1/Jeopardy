@@ -119,6 +119,7 @@ const jeopardyCategories = [
 ]
 
 
+let score = 0
 
 function addCategory() {
     const column = document.createElement('div')
@@ -147,8 +148,8 @@ function addCategory() {
         }
 
         card.setAttribute('data-question', question.question)
-        card.setAttribute('data-answare-1', question.answers[0])
-        card.setAttribute('data-answare-2', question.answers[1])
+        card.setAttribute('data-answer-1', question.answers[0])
+        card.setAttribute('data-answer-2', question.answers[1])
         card.setAttribute('data-correct', question.correct)
         card.setAttribute('data-value', card.getInnerHTML())
     
@@ -170,7 +171,43 @@ function flipCard() {
 
     firstButton.classList.add('first-button')
     secondButton.classList.add('second-button')
-    firstButton.innerHTML = this.getAtribute('data-answare-1')
-    secondButton.innerHTML = this.getAtribute('data-answare-2')
+    firstButton.innerHTML = this.getAtribute('data-answer-1')
+    secondButton.innerHTML = this.getAtribute('data-answer-2')
+    
+    firstButton.addEventListener('click', getResult)
+    secondButton.addEventListener('click', getResult)
     this.append(textDisplay, firstButton, secondButton)
+
+    const allCards = Array.from(document.querySelectorAll('.card'))
+    allCards.forEach(card => card.removeEventListener('click', flipCard))
 }
+
+function getResult() {
+
+    const allCards = Array.from(document.querySelectorAll('.card'))
+    allCards.forEach(card => card.addEventListener('click', flipCard))
+
+    const cardOfButton = this.parrentElement
+
+    if(cardOfButton.getAtribute('data-correct') == this.innerHTML) {
+        score = score + parseInt(cardOfButton.getAtribute('data-value'))
+        scoreDisplay.innerHTML = score
+        cardOfButton.classList.add('correct-answer')
+        setTimeout(() => {
+            while(cardOfButton.firstChild) {
+                cardOfButton.removeChild(cardOfButton.lastChild)
+            }
+            cardOfButton.innerHTML = cardOfButton.getAtribute('data-value')
+        }, 100)
+    } else {
+        cardOfButton.classList.add('wrong-answer')
+        setTimeout(() => {
+            while(cardOfButton.firstChild) {
+                cardOfButton.removeChild(cardOfButton.lastChild)
+            }
+            cardOfButton.innerHTML = 0
+        }, 100)
+    }
+    cardOfButton.removeEventListener('click', flipCard)
+}
+
