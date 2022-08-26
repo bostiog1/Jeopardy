@@ -4,7 +4,8 @@ const scoreDisplay = document.getElementById('score')
 const jeopardyCategories = [
     {
         genre:'WHO',
-        questions: [{
+        questions: [
+            {
             question:"Who wrote Harry Potter?",
             answers:["JK Rowling", "JRR Tolkien"],
             correct: "JK Rowling",
@@ -121,13 +122,13 @@ const jeopardyCategories = [
 
 let score = 0
 
-function addCategory() {
+function addCategory(category) {
     const column = document.createElement('div')
     column.classList.add('genre-column')
 
     const genreTitle = document.createElement('div')
     genreTitle.classList.add('genre-title')
-    genreTitle.innerHTML = category.genre
+    genreTitle.innerText = category.genre
 
     column.appendChild(genreTitle)
     game.append(column)
